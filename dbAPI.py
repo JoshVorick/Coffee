@@ -55,6 +55,7 @@ def get_user(user_id):
 # Create a new user
 @app.route('/api/v1/users', methods=['POST'])
 def post_user():
+	# Require both a name and a profileid
 	if not request.json or not 'name' in request.json or not 'profileid' in request.json:
 		abort(400)
 
@@ -81,8 +82,15 @@ def post_user():
 # Update a specific user
 @app.route('/api/v1/users/<int:user_id>', methods=['PUT'])
 def put_user(user_id):
-	if not request.json or not 'id' in request.json or (not 'name' in request.json and not 'profileid' in request.json):
+	# Require at least one non-id attribute
+	if not request.json or (not 'name' in request.json and not 'profileid' in request.json):
 		abort(400)
+
+	# Fill in each empty attribute with null
+	if not 'name' in request.json:
+		request.json['name'] = None
+	if not 'profileid' in request.json:
+		request.json['profileid'] = None
 
 	# Connect to the database
 	connection = pymysql.connect(host='localhost',
@@ -95,7 +103,6 @@ def put_user(user_id):
 	result = {'success':'false'}
 	try:
 	    with connection.cursor() as cursor:
-	        # TODO: Allow updating of only one attribute
 	        sql = "UPDATE `user` SET `name`=%s, `profileid`=%s where `id`=%s"
 	        cursor.execute(sql, (request.json['name'], request.json['profileid'],request.json['id']))
 	        connection.commit()
@@ -174,10 +181,20 @@ def get_event(event_id):
 	return jsonify(result)
 
 # Create a new event
+# Format for time is YYYY-MM-DD HH:MM:SS
 @app.route('/api/v1/events', methods=['POST'])
 def post_event():
+	# Make sure friendid is passed in
 	if not request.json or not 'friendid' in request.json:
 		abort(400)
+
+	# Fill each empty attribute with null
+	if 'location' not in request.json:
+		request.json['location'] = None
+	if 'time' not in request.json:
+		request.json['time'] = None
+	if 'type' not in request.json:
+		request.json['type'] = None
 
 	# Connect to the database
 	connection = pymysql.connect(host='localhost',
@@ -210,6 +227,16 @@ def put_event(event_id):
 				not 'time' in request.json and
 				not 'location' in request.json):
 		abort(400)
+
+	# Fill each empty attribute with null
+	if not 'friendid' in request.json:
+		request.json['friendid'] = None
+	if not 'location' in request.json:
+		request.json['location'] = None
+	if not 'time' in request.json:
+		request.json['time'] = None
+	if not 'type' in request.json:
+		request.json['type'] = None
 
 	# Connect to the database
 	connection = pymysql.connect(host='localhost',
