@@ -1,0 +1,18 @@
+CREATE TABLE `user` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) COLLATE utf8_bin NOT NULL,
+    `profileid` varchar(255) COLLATE utf8_bin NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+AUTO_INCREMENT=1 ;
+
+
+CREATE TABLE `event` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `friendid` int(11) NOT NULL,
+    `type` varchar(255) COLLATE utf8_bin,
+    `time` datetime,
+    `location` varchar(255) COLLATE utf8_bin,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+AUTO_INCREMENT=1 ;
