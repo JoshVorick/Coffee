@@ -18,10 +18,44 @@ angular.module('starter', ['ionic'])
   });
 })
 .config(function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('/')
-
-  $stateProvider.state('friends', {
-    url: '/friends',
-    templateUrl: 'friends.html'
+  
+  $stateProvider.state('login', {
+    url: '/login',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/login.html",
+        controller: 'MainController'
+      }
+    }
   })
+  .state('friends', {
+    url: '/friends',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/friends.html",
+        controller: 'MainController'
+      }
+    }
+  })
+  .state('events', {
+    url: '/events',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/events.html",
+        controller: 'MainController'
+      }
+    }
+  })
+  .state('settings', {
+    url: '/settings',
+    views: {
+      'menuContent': {
+        templateUrl: "templates/settings.html",
+        controller: 'MainController'
+      }
+    }
+  });
+  $urlRouterProvider.otherwise('/friends');
+
 })
+.controllers
