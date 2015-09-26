@@ -1,7 +1,12 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response, request
 import pymysql.cursors
 
 app = Flask(__name__)
+
+# Return JSON on 404 instead of HTML
+@app.errorhandler(404)
+def not_found(error):
+	return make_response(jsonify({'error': 'API call not found'}), 404)
 
 # Get ALL of the users
 @app.route('/api/v1/users', methods=['GET'])
@@ -20,10 +25,10 @@ def get_users():
 	        # Read a single record
 	        sql = "SELECT * FROM `user`"
 	        cursor.execute(sql)
-	        result = cursor.fetchall()
+	        result = { 'users' : cursor.fetchall() }
 	finally:
 	    connection.close()
-	return jsonify({ "users" : result })
+	return jsonify(result)
 
 # Get a specific user
 @app.route('/api/v1/users/<int:user_id>', methods=['GET'])
@@ -48,26 +53,103 @@ def get_user(user_id):
 	return jsonify(result)
 
 # Create a new user
-@app.route('/api/v1/users/<int:user_id>', methods=['POST'])
-def post_user(user_id):
-	return jsonify({'success':'false'})
+@app.route('/api/v1/users', methods=['POST'])
+def post_user():
+	if not request.json or not 'name' in request.json or not 'profileid' in request.json:
+		abort(400)
+
+	# Connect to the database
+	connection = pymysql.connect(host='localhost',
+                	             port=3306,
+                                 user='josh',
+            	                 password='asdf',
+                	             db='coffee',
+                    	         charset='utf8mb4',
+                        	     cursorclass=pymysql.cursors.DictCursor)
+	result = {'success':'false'}
+	try:
+	    with connection.cursor() as cursor:
+	        # Read a single record
+	        sql = "INSERT INTO `user` (`name`, `profileid`) values (%s, %s)"
+	        cursor.execute(sql, (request.json['name'], request.json['profileid'],))
+	        connection.commit()
+	        result = {'success':'true'}
+	finally:
+	    connection.close()
+	return jsonify(result)
 
 # Update a specific user
 @app.route('/api/v1/users/<int:user_id>', methods=['PUT'])
 def put_user(user_id):
-	return jsonify({'success':'false'})
+	if not request.json or not 'id' in request.json or (not 'name' in request.json and not 'profileid' in request.json):
+		abort(400)
+
+	# Connect to the database
+	connection = pymysql.connect(host='localhost',
+                	             port=3306,
+                                 user='josh',
+            	                 password='asdf',
+                	             db='coffee',
+                    	         charset='utf8mb4',
+                        	     cursorclass=pymysql.cursors.DictCursor)
+	result = {'success':'false'}
+	try:
+	    with connection.cursor() as cursor:
+	        # TODO: Allow updating of only one attribute
+	        sql = "UPDATE `user` SET `name`=%s, `profileid`=%s where `id`=%s"
+	        cursor.execute(sql, (request.json['name'], request.json['profileid'],request.json['id']))
+	        connection.commit()
+	        result = {'success':'true'}
+	finally:
+	    connection.close()
+	return jsonify(result)
 
 # Delete a specific user
 @app.route('/api/v1/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
-	return jsonify({'success':'false'})
+	# Connect to the database
+	connection = pymysql.connect(host='localhost',
+                	             port=3306,
+                                 user='josh',
+            	                 password='asdf',
+                	             db='coffee',
+                    	         charset='utf8mb4',
+                        	     cursorclass=pymysql.cursors.DictCursor)
+	result = {'success':'false'}
+	try:
+	    with connection.cursor() as cursor:
+	        # Read a single record
+	        sql = "DELETE FROM `user` WHERE id = %s"
+	        cursor.execute(sql, (user_id,))
+	        connection.commit()
+	        result = {'success':'true'}
+	finally:
+	    connection.close()
+	return jsonify(result)
 
 
 
 # Get ALL of the events
 @app.route('/api/v1/events', methods=['GET'])
 def get_events():
-	return jsonify({"events":["bob","joe","james"]})
+	# Connect to the database
+	connection = pymysql.connect(host='localhost',
+                	             port=3306,
+                                 user='josh',
+            	                 password='asdf',
+                	             db='coffee',
+                    	         charset='utf8mb4',
+                        	     cursorclass=pymysql.cursors.DictCursor)
+	result = {'success':'False'}
+	try:
+	    with connection.cursor() as cursor:
+	        # Read a single record
+	        sql = "SELECT * FROM `event`"
+	        cursor.execute(sql)
+	        result = { 'events' : cursor.fetchall()}
+	finally:
+	    connection.close()
+	return jsonify(result)
 
 # Get a specific event
 @app.route('/api/v1/events/<int:event_id>', methods=['GET'])
@@ -85,26 +167,92 @@ def get_event(event_id):
 	    with connection.cursor() as cursor:
 	        # Read a single record
 	        sql = "SELECT * FROM `user` WHERE id = %s"
-	        cursor.execute(sql, (user_id,))
+	        cursor.execute(sql, (event_id,))
 	        result = cursor.fetchone()
 	finally:
 	    connection.close()
 	return jsonify(result)
 
 # Create a new event
-@app.route('/api/v1/events/<int:event_id>', methods=['POST'])
-def post_event(event_id):
-	return jsonify({'success':'false'})
+@app.route('/api/v1/events', methods=['POST'])
+def post_event():
+	if not request.json or not 'friendid' in request.json:
+		abort(400)
+
+	# Connect to the database
+	connection = pymysql.connect(host='localhost',
+                	             port=3306,
+                                 user='josh',
+            	                 password='asdf',
+                	             db='coffee',
+                    	         charset='utf8mb4',
+                        	     cursorclass=pymysql.cursors.DictCursor)
+	result = {'success':'false'}
+	try:
+	    with connection.cursor() as cursor:
+	        # Read a single record
+	        # TODO: Allow you to only create required fields
+	        sql = "INSERT INTO `event` (`friendid`, `location`, `time`, `type`) values (%s, %s, %s, %s)"
+	        cursor.execute(sql, (request.json['friendid'], request.json['location'], request.json['time'], request.json['type'],))
+	        connection.commit()
+	        result = {'success':'true'}
+	finally:
+	    connection.close()
+	return jsonify(result)
 
 # Update a specific event
 @app.route('/api/v1/events/<int:event_id>', methods=['PUT'])
 def put_event(event_id):
-	return jsonify({'success':'false'})
+	# PUT body must contain at least one non-id attritbute
+	if not request.json or (
+				not 'friendid' in request.json and
+				not 'type' in request.json and
+				not 'time' in request.json and
+				not 'location' in request.json):
+		abort(400)
+
+	# Connect to the database
+	connection = pymysql.connect(host='localhost',
+                	             port=3306,
+                                 user='josh',
+            	                 password='asdf',
+                	             db='coffee',
+                    	         charset='utf8mb4',
+                        	     cursorclass=pymysql.cursors.DictCursor)
+	result = {'success':'false'}
+	try:
+	    with connection.cursor() as cursor:
+	        # TODO: Allow updating of only one attribute
+	        sql = "UPDATE `event` SET `friendid`=%s, `type`=%s, `time`=%s, `location`=%s where `id`=%s"
+	        cursor.execute(sql, (request.json['friendid'],request.json['type'],request.json['time'],request.json['location'],event_id,))
+	        connection.commit()
+	        result = {'success':'true'}
+	finally:
+	    connection.close()
+	return jsonify(result)
 
 # Delete a specific event
 @app.route('/api/v1/events/<int:event_id>', methods=['DELETE'])
 def delete_event(event_id):
-	return jsonify({'success':'false'})
+	# Connect to the database
+	connection = pymysql.connect(host='localhost',
+                	             port=3306,
+                                 user='josh',
+            	                 password='asdf',
+                	             db='coffee',
+                    	         charset='utf8mb4',
+                        	     cursorclass=pymysql.cursors.DictCursor)
+	result = {'success':'false'}
+	try:
+	    with connection.cursor() as cursor:
+	        # Read a single record
+	        sql = "DELETE FROM `event` WHERE id = %s"
+	        cursor.execute(sql, (event_id,))
+	        connection.commit()
+	        result = {'success':'true'}
+	finally:
+	    connection.close()
+	return jsonify(result)
 
 
 
