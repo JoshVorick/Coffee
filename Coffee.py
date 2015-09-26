@@ -70,17 +70,25 @@ def pullFriendInfo(id):
 	picture = graph.get(picRequest)['data']['url']
 	return json.dumps({'name': name, 'picture': picture})
 
+
+
+# Connect to the database
+def db_connect():
+	return pymysql.connect(host='localhost',
+						   port=5432,
+						   user='owvnvhqozcnkak',
+						   password='trPCRDSfIE2tPwdmZtm2LuuRr',
+						   db='coffee',
+						   charset='utf8mb4',
+						   cursorclass=pymysql.cursors.DictCursor)
+
+
 # Get ALL of the users
 @app.route('/api/v1/users', methods=['GET'])
 def get_users():
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+	
 	result = {'success':'False'}
 	try:
 		with connection.cursor() as cursor:
@@ -90,19 +98,13 @@ def get_users():
 			result = { 'users' : cursor.fetchall() }
 	finally:
 		connection.close()
-	return jsonify(result)
 
 # Get a specific user
 @app.route('/api/v1/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+
 	result = {'success':'False'}
 	try:
 		with connection.cursor() as cursor:
@@ -122,13 +124,8 @@ def post_user():
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+	
 	result = {'success':'false'}
 	try:
 		with connection.cursor() as cursor:
@@ -149,13 +146,8 @@ def put_user(user_id):
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+
 	result = {'success':'false'}
 	try:
 		with connection.cursor() as cursor:
@@ -175,13 +167,8 @@ def put_user(user_id):
 @app.route('/api/v1/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+	
 	result = {'success':'false'}
 	try:
 		with connection.cursor() as cursor:
@@ -200,13 +187,8 @@ def delete_user(user_id):
 @app.route('/api/v1/events', methods=['GET'])
 def get_events():
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+	
 	result = {'success':'False'}
 	try:
 		with connection.cursor() as cursor:
@@ -222,13 +204,8 @@ def get_events():
 @app.route('/api/v1/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+	
 	result = {'success':'False'}
 	try:
 		with connection.cursor() as cursor:
@@ -257,13 +234,8 @@ def post_event():
 		request.json['type'] = None
 
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+	
 	result = {'success':'false'}
 	try:
 		with connection.cursor() as cursor:
@@ -288,13 +260,8 @@ def put_event(event_id):
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+	
 	result = {'success':'false'}
 	try:
 		with connection.cursor() as cursor:
@@ -320,13 +287,8 @@ def put_event(event_id):
 @app.route('/api/v1/events/<int:event_id>', methods=['DELETE'])
 def delete_event(event_id):
 	# Connect to the database
-	connection = pymysql.connect(host='localhost',
-								 port=3306,
-								 user='josh',
-								 password='asdf',
-								 db='coffee',
-								 charset='utf8mb4',
-								 cursorclass=pymysql.cursors.DictCursor)
+	connection = db_connect()
+
 	result = {'success':'false'}
 	try:
 		with connection.cursor() as cursor:
