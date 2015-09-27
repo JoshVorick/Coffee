@@ -160,7 +160,7 @@ def get_events():
 		return jsonify({ 'events' : cursor.fetchall()})
 
 @app.route('/api/v1/users/<string:user_id>/events', methods=['GET'])
-def get_event(user_id):
+def get_users_event(user_id):
 	with connection.cursor() as cursor:
 		# Read a single record
 		sql = "SELECT * FROM events WHERE user1 = %s OR user2 = %s"
