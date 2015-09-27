@@ -1,0 +1,71 @@
+[
+	{
+		"_id": "1",
+		"name": "Sheehan Toufiq",
+		"bio": "This is my bio.",
+		"image": "http://placehold.it/100x100",
+		"merchants": [
+			{
+				"_id": "1",
+				"name": "Firehouse Subs",
+				"type": "food"
+			}
+		],
+		"friends": [
+			{
+				"_id": "1",
+				"name": "Elon Musk",
+				"bio": "Bossman",
+				"image": "http://placehold.it/100x100",
+				"status": ""
+			},
+			{
+				"_id": "2",
+				"name": "John Doe",
+				"bio": "I'm pretty boring.",
+				"image": "http://placehold.it/100x100",
+				"status": ""
+			},
+			{
+				"_id": "3",
+				"name": "Goku",
+				"bio": "Training in otherworld.",
+				"image": "http://placehold.it/100x100",
+				"status": ""
+			},
+			{
+				"_id": "4",
+				"name": "Rick James",
+				"bio": "I'm Rick James Bitch!",
+				"image": "http://placehold.it/100x100",
+				"status": "fuck-off"
+			},
+			{
+				"_id": "5",
+				"name": "Charlie Murphy",
+				"bio": "Cocaine is a hell of a drug.",
+				"image": "http://placehold.it/100x100",
+				"status": "not-now"
+			}
+		],
+		"events": [
+			{
+				"_id": "1",
+				"event_type": "pizza",
+				"event_date": "today",
+				"event_time": "evening",
+				"event_location": "",
+				"event_friend": "",
+				"event_status": ""
+			},
+			{
+				"_id": "2",
+				"event_type": "coffee",
+				"event_date": "today",
+				"event_time": "afternoon",
+				"event_location": "",
+				"event_friend": ""
+			}
+		]
+	}
+]

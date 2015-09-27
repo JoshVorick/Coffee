@@ -1,0 +1,17 @@
+<ion-header-bar class="bar bar-subheader bar-light">
+  <h2 class="title">upcoming events</h2>
+</ion-header-bar>
+<ion-view view-title="events">
+  <ion-content>
+    <ion-list show-delete="false" can-swipe="true">
+      <ion-item ng-repeat="event in events" class="item item-icon-left">
+      	<i class="icon ion-{{ event.event_type }}"></i>
+      	
+        <h2>with {{ event.event_friend }}</h2>
+        <p>{{ event.event_date + " " + event.event_time + " at " + event.event_location }}</p>
+        <ion-option-button class="button-balanced icon ion-compose" ng-click="createDate()" style="width:80px;"></ion-option-button>
+        <ion-option-button class="button-assertive icon ion-close-circled" ng-click="removeEvent(event._id)" style="width:80px;"></ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
