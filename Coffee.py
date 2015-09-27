@@ -89,7 +89,7 @@ def pullFriendInfo(id):
 def get_users():
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "SELECT * FROM `user`"
+		sql = "SELECT * FROM users"
 		cursor.execute(sql)
 		return jsonify({ 'users' : cursor.fetchall() })
 
@@ -98,21 +98,24 @@ def get_users():
 def get_user(user_id):
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "SELECT * FROM `user` WHERE id = %s"
+		sql = "SELECT * FROM users WHERE profileid = '%s'"
 		cursor.execute(sql, (user_id,))
-		return jsonify(cursor.fetchone())
+                res = cursor.fetchone()
+                if(res is None):
+                    return jsonify({'error':'No such user'})
+		return jsonify(res)
 
 # Create a new user
 @app.route('/api/v1/users', methods=['POST'])
 def post_user():
 	# Require both a name and a profileid
-	if not request.json or not 'name' in request.json or not 'profileid' in request.json:
+	if not request.json or not 'name' in request.json or not 'profileid' in request.json or not 'accessid' in request.json:
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "INSERT INTO `user` (`name`, `profileid`) values (%s, %s)"
-		cursor.execute(sql, (request.json['name'], request.json['profileid'],))
+		sql = "INSERT INTO users (name, profileid, accessid) values (%s, %s, %s)"
+		cursor.execute(sql, (request.json['name'], request.json['profileid'], request.json['accessid']))
 		connection.commit()
 		return jsonify({'success':'true'})
 
@@ -125,20 +128,22 @@ def put_user(user_id):
 
 	with connection.cursor() as cursor:
 		if 'name' in request.json:
-			sql = "UPDATE `user` SET `name`=%s where `id`=%s"
+			sql = "UPDATE users SET name=%s where profileid=%s"
 			cursor.execute(sql, (request.json['name'], user_id,))
+                        connection.commit()
+                        return jsonify({'success':'true'})
 		if 'profileid' in request.json:
-			sql = "UPDATE `user` SET `profileid`=%s where `id`=%s"
+			sql = "UPDATE users SET profileid=%s where profileid=%s"
 			cursor.execute(sql, (request.json['profileid'], user_id,))
-		connection.commit()
-		return jsonify({'success':'true'})
+                        connection.commit()
+                        return jsonify({'success':'true'})
 
 # Delete a specific user
-@app.route('/api/v1/users/<int:user_id>', methods=['DELETE'])
+@app.route('/api/v1/users/<string:user_id>', methods=['DELETE'])
 def delete_user(user_id):
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "DELETE FROM `user` WHERE id = %s"
+		sql = "DELETE FROM users WHERE profileid = %s"
 		cursor.execute(sql, (user_id,))
 		connection.commit()
 		return jsonify({'success':'true'})
@@ -149,7 +154,7 @@ def delete_user(user_id):
 def get_events():
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "SELECT * FROM `event`"
+		sql = "SELECT * FROM events"
 		cursor.execute(sql)
 		return jsonify({ 'events' : cursor.fetchall()})
 
@@ -158,16 +163,19 @@ def get_events():
 def get_event(event_id):
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "SELECT * FROM `user` WHERE id = %s"
+		sql = "SELECT * FROM users WHERE id = %s"
 		cursor.execute(sql, (event_id,))
-		return jsonify(cursor.fetchone())
+                res = cursor.fetchone()
+                if(res is None):
+                    return jsonify({'error':'No such user'})
+		return jsonify(res)
 
 # Create a new event
 # Format for time is YYYY-MM-DD HH:MM:SS
 @app.route('/api/v1/events', methods=['POST'])
 def post_event():
-	# Make sure friendid is passed in
-	if not request.json or not 'friendid' in request.json:
+	# Make sure user1 and user2 are passed in
+	if not request.json or not 'user1' or not 'user2' in request.json:
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
 	# Fill each empty attribute with null
@@ -180,8 +188,8 @@ def post_event():
 
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "INSERT INTO `event` (`friendid`, `location`, `time`, `type`) values (%s, %s, %s, %s)"
-		cursor.execute(sql, (request.json['friendid'], request.json['location'], request.json['time'], request.json['type'],))
+		sql = "INSERT INTO events (user1, user2, location, time, type, status) values (%s, %s, %s, %s, %s, %s)"
+		cursor.execute(sql, (request.json['user1'], request.json['user2'], request.json['location'], request.json['time'],request.json['type'],request.json['status']))
 		connection.commit()
 		return jsonify({'success':'true'})
 
@@ -190,24 +198,27 @@ def post_event():
 def put_event(event_id):
 	# PUT body must contain at least one non-id attritbute
 	if not request.json or (
-				not 'friendid' in request.json and
+				(
+                                    not 'user2' in request.json or
+				    not 'user1' in request.json
+                                ) and
 				not 'type' in request.json and
 				not 'time' in request.json and
 				not 'location' in request.json):
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
 	with connection.cursor() as cursor:
-		if 'friendid' in request.json:
-			sql = "UPDATE `event` SET `friendid`=%s where `id`=%s"
+		if 'user1' in request.json and 'user2' in request.json:
+			sql = "UPDATE events SET user1=%s user2=%s where id=%s"
 			cursor.execute(sql, (request.json['friendid'],event_id,))
 		if 'location' in request.json:
-			sql = "UPDATE `event` SET `location`=%s where `id`=%s"
+			sql = "UPDATE events SET location=%s where id=%s"
 			cursor.execute(sql, (request.json['location'],event_id,))
 		if 'type' in request.json:
-			sql = "UPDATE `event` SET `type`=%s where `id`=%s"
+			sql = "UPDATE events SET type=%s where id=%s"
 			cursor.execute(sql, (request.json['type'],event_id,))
 		if 'time' in request.json:
-			sql = "UPDATE `event` SET `time`=%s where `id`=%s"
+			sql = "UPDATE events SET time=%s where id=%s"
 			cursor.execute(sql, (request.json['time'],event_id,))
 		connection.commit()
 		return jsonify({'success':'true'})
@@ -217,12 +228,10 @@ def put_event(event_id):
 def delete_event(event_id):
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "DELETE FROM `event` WHERE id = %s"
+		sql = "DELETE FROM events WHERE id = %s"
 		cursor.execute(sql, (event_id,))
 		connection.commit()
 		return jsonify({'success':'true'})
-
-
 
 if __name__ == '__main__':
 	app.run(debug=True)
