@@ -12,6 +12,9 @@ from authomatic.adapters import WerkzeugAdapter
 from authomatic import Authomatic
 from config import CONFIG
 
+# Needed for Capital One API Suggestions
+import suggestionshelpers
+
 # Needed for Flask
 from flask import Flask, render_template, request, make_response
 app = Flask(__name__)
@@ -243,6 +246,23 @@ def delete_event(event_id):
 		cursor.execute(sql, (event_id,))
 		connection.commit()
 		return jsonify({'success':'true'})
+
+# Provides event suggestions for a specific user
+@app.route('/api/v1/events/<user_id>/suggestions')
+def getSuggestions(user_id):
+	# Need to put sql code here to pull acc_id from user.
+	purchaseList = getPurchases(acc_id)
+	placeList = {}
+
+	for each in purchaseList:
+		openMerchant(each, placeList)
+
+	#Runs through Dict first and then list to remove any duplicates
+	suggestionsList = []
+	for each in placeList.keys():
+		suggestionsList.append({'name': each, 'type': placeList[each]})
+
+	return json.dumps(suggestionsList)
 
 if __name__ == '__main__':
 	app.run(debug=True)
