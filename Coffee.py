@@ -127,10 +127,13 @@ def post_user():
 	if not request.json or not 'name' in request.json or not 'profileid' in request.json or not 'accessid' in request.json:
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
+	if not 'accountid' in request.json:
+		request.json['accountid'] = None
+
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "INSERT INTO users (name, profileid, accessid) values (%s, %s, %s)"
-		cursor.execute(sql, (request.json['name'], request.json['profileid'], request.json['accessid']))
+		sql = "INSERT INTO users (name, profileid, accessid, accountid) values (%s, %s, %s, %s)"
+		cursor.execute(sql, (request.json['name'], request.json['profileid'], request.json['accessid'], request.json['accountid']))
 		connection.commit()
 		return jsonify({'success':'true'})
 
@@ -138,20 +141,18 @@ def post_user():
 @app.route('/api/v1/users/<string:user_id>', methods=['PUT'])
 def put_user(user_id):
 	# Require at least one non-id attribute
-	if not request.json or (not 'name' in request.json and not 'profileid' in request.json):
+	if not request.json or (not 'name' in request.json and not 'accountid' in request.json):
 		return jsonify({'success':'false - Didn\'t supply enough parameters'})
 
 	with connection.cursor() as cursor:
 		if 'name' in request.json:
 			sql = "UPDATE users SET name=%s where profileid=%s"
 			cursor.execute(sql, (request.json['name'], user_id,))
-                        connection.commit()
-                        return jsonify({'success':'true'})
-		if 'profileid' in request.json:
-			sql = "UPDATE users SET profileid=%s where profileid=%s"
-			cursor.execute(sql, (request.json['profileid'], user_id,))
-                        connection.commit()
-                        return jsonify({'success':'true'})
+		if 'accountid' in request.json:
+			sql = "UPDATE users SET accountid=%s where profileid=%s"
+			cursor.execute(sql, (request.json['accountid'], user_id))
+        connection.commit()
+        return jsonify({'success':'true'})
 
 # Delete a specific user
 @app.route('/api/v1/users/<string:user_id>', methods=['DELETE'])

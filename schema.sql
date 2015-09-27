@@ -5,6 +5,7 @@ CREATE TABLE users (
     name varchar(255) NOT NULL,
     profileid varchar(255) NOT NULL,
     accessid varchar(255) NOT NULL,
+    accessid varchar(255) NOT NULL,
     PRIMARY KEY(profileid)
 );
 
