@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -19,43 +19,47 @@ angular.module('starter', ['ionic'])
 })
 .config(function($stateProvider, $urlRouterProvider) {
   
-  $stateProvider.state('login', {
-    url: '/login',
-    views: {
-      'menuContent': {
-        templateUrl: "templates/login.html",
-        controller: 'MainController'
-      }
-    }
+  $stateProvider.state('tab', {
+    url: '/tab',
+    abstract: true,
+    templateUrl: 'templates/tabs.html'    
   })
-  .state('friends', {
+  .state('tab.friends', {
     url: '/friends',
     views: {
-      'menuContent': {
+      'friends': {
         templateUrl: "templates/friends.html",
         controller: 'MainController'
       }
     }
   })
-  .state('events', {
+  .state('tab.events', {
     url: '/events',
     views: {
-      'menuContent': {
+      'events': {
         templateUrl: "templates/events.html",
         controller: 'MainController'
       }
     }
   })
-  .state('settings', {
+  .state('tab.settings', {
     url: '/settings',
     views: {
-      'menuContent': {
+      'settings': {
         templateUrl: "templates/settings.html",
         controller: 'MainController'
       }
     }
+  })
+  .state('date', {
+    url: '/date',
+    views: {
+      'date': {
+        templateUrl: "templates/date.html",
+        controller: 'MainController'
+      }
+    }
   });
-  $urlRouterProvider.otherwise('/friends');
+  $urlRouterProvider.otherwise('/tab/friends');
 
 })
-.controllers
