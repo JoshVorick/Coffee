@@ -16,8 +16,6 @@ from config import CONFIG
 from flask import Flask, render_template, request, make_response
 app = Flask(__name__)
 
-MY_ACCESS_TOKEN = "883030211746778|d3c627235a423cc7ebc7ccb564cea7a2"
-
 # Instantiate Authomatic.
 authomatic = Authomatic(CONFIG, 'your secret string', report_errors=False)
 
@@ -57,7 +55,6 @@ def login():
         status = request.args.get('status')
         return json.dumps({'code': code, 'status': status, 'id': result.user.id, 'name':result.user.name})
             
-    
     # Don't forget to return the response.
     return response
 
