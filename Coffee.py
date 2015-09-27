@@ -40,7 +40,7 @@ def not_found(error):
 # Login
 @app.route('/api/v1/login', methods=['GET', 'POST'])
 def login():
-	# We need response object for the WerkzeugAdapter.
+    # We need response object for the WerkzeugAdapter.
     response = make_response()
     
     # Log the user in, pass it the adapter and the provider name.
@@ -55,34 +55,19 @@ def login():
         # Executes when a user successfully logs in and is authenticated
         code = request.args.get('code')
         status = request.args.get('status')
-        return json.dumps({'code': code, 'status': status})
+        return json.dumps({'code': code, 'status': status, 'id': result.user.id, 'name':result.user.name})
+            
     
     # Don't forget to return the response.
     return response
 
 # Get all of the a person's friends using the app
-@app.route("/api/v1/friends")
+@app.route("/api/v1/users/<string:user_id>/friends")
 def pullFriendsList():
-
-	graph = GraphAPI(MY_ACCESS_TOKEN)
+	graph = GraphAPI(user_id)
 	request = "me/friends"
 	rawData = graph.get(request)
-	
 	return json.dumps(rawData)
-
-# Get a friend by their Facebook ID and returns their name and picture url
-@app.route("/api/v1/friends/<id>")
-def pullFriendInfo(id):
-	"""Pulls the profile picture and full name of a Facebook 
-	user when a given id is passed through it"""
-	graph = GraphAPI(MY_ACCESS_TOKEN)
-	nameRequest = "/{}".format(id)
-	name = graph.get(nameRequest)
-	name = name['name']
-	picRequest = "/{}/picture?redirect=false".format(id)
-	picture = graph.get(picRequest)['data']['url']
-	return json.dumps({'name': name, 'picture': picture})
-
 
 # Get ALL of the users
 @app.route('/api/v1/users', methods=['GET'])
@@ -173,6 +158,17 @@ def get_events():
 		sql = "SELECT * FROM events"
 		cursor.execute(sql)
 		return jsonify({ 'events' : cursor.fetchall()})
+
+@app.route('/api/v1/users/<string:user_id>/events', methods=['GET'])
+def get_event(user_id):
+	with connection.cursor() as cursor:
+		# Read a single record
+		sql = "SELECT * FROM events WHERE user1 = %s OR user2 = %s"
+		cursor.execute(sql, (user_id,))
+                res = cursor.fetchone()
+                if(res is None):
+                    return jsonify({'error':'No such event'})
+		return jsonify(res)
 
 # Get a specific event
 @app.route('/api/v1/events/<int:event_id>', methods=['GET'])
