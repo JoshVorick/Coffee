@@ -4,6 +4,13 @@
 		"name": "Sheehan Toufiq",
 		"bio": "This is my bio.",
 		"image": "http://placehold.it/100x100",
+		"merchants": [
+			{
+				"_id": "1",
+				"name": "Firehouse Subs",
+				"type": "food"
+			}
+		],
 		"friends": [
 			{
 				"_id": "1",
