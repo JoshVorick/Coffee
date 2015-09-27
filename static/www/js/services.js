@@ -7,48 +7,42 @@ angular.module('starter.services', [])
 
 	var users = [];
 	var currentUser = {
-		first_name: 'Sheehan',
-		last_name: 'Toufiq',
+		name: 'Sheehan Toufiq',
 		bio: 'This is my bio',
 		image: 'http://placehold.it/100x100'
 	};
 	var friends = [
 		{
 			_id: '1',
-			first_name: 'Elon',
-			last_name: 'Musk',
+			name: 'Elon Musk',
 			bio: 'Bossman',
 			image: 'http://placehold.it/100x100',
 			status: ''
 		},
 		{
 			_id: '2',
-			first_name: 'John',
-			last_name: 'Doe',
+			name: 'John Doe',
 			bio: 'Im pretty boring',
 			image: 'http://placehold.it/100x100',
 			status: ''
 		},
 		{
 			_id: '3',
-			first_name: 'Goku',
-			last_name: '',
+			name: 'Goku',
 			bio: 'Training in otherworld.',
 			image: 'http://placehold.it/100x100',
 			status: ''
 		},
 		{
 			_id: '4',
-			first_name: 'Rick',
-			last_name: 'James',
+			name: 'Rick James',
 			bio: 'Im Rick James Bitch',
 			image: 'http://placehold.it/100x100',
 			status: 'fuck-off'
 		},
 		{
 			_id: '5',
-			first_name: 'Charlie',
-			last_name: 'Murphy',
+			name: 'Charlie Murphy',
 			bio: 'Cocaine is one hell of a drug.',
 			image: 'http://placehold.it/100x100',
 			status: 'not-now'
@@ -76,6 +70,10 @@ angular.module('starter.services', [])
 		},
 		updateFriend: function() {
 			
+		},
+		deleteFriend: function(friendId) {
+			var pos = friends.map(function(e) { return e._id; }).indexOf(friendId);
+			friends.splice(pos, 1);
 		}
 	};
 	return UserService;
@@ -103,6 +101,7 @@ angular.module('starter.services', [])
 		}
 	];
 	var newEvent = function(e) {
+		this._id = '3';
 		this.event_type = e.event_type;
 		this.event_date = e.event_date;
 		this.event_time = e.event_time;
@@ -123,8 +122,9 @@ angular.module('starter.services', [])
 		updateEvent: function() {
 			
 		},
-		deleteEvent: function() {
-
+		deleteEvent: function(eventId) {
+			var pos = events.map(function(e) { return e._id; }).indexOf(eventId);
+			events.splice(pos, 1);
 		}
 	};
 	return EventService;

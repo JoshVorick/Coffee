@@ -20,6 +20,13 @@ angular.module('starter.controllers', [])
     //EventService.createEvent($scope.newEvent);
   };
 
+  $scope.removeFriend = function(friendId) {
+    UserService.deleteFriend(friendId);
+  };
+  $scope.removeEvent = function(eventId) {
+    EventService.deleteEvent(eventId);
+  };
+
   $ionicModal.fromTemplateUrl('templates/date.html', {
     scope: $scope
   }).then(function(modal) {
@@ -45,8 +52,8 @@ angular.module('starter.controllers', [])
 
   // Open the login modal
   $scope.createTime = function() {
-    $scope.modal.hide();
     $scope.modalTime.show();
+    $scope.modal.hide();
   };
 
   // Perform the login action when the user submits the login form
