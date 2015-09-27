@@ -19,6 +19,8 @@ app = Flask(__name__)
 # Instantiate Authomatic.
 authomatic = Authomatic(CONFIG, 'your secret string', report_errors=False)
 
+MY_ACCESS_TOKEN = "883030211746778|d3c627235a423cc7ebc7ccb564cea7a2"
+
 # Connect to the database
 urlparse.uses_netloc.append('postgres')
 url = urlparse.urlparse(os.environ['DATABASE_URL'])
@@ -60,9 +62,9 @@ def login():
 
 # Get all of the a person's friends using the app
 @app.route("/api/v1/users/<string:user_id>/friends")
-def pullFriendsList():
-	graph = GraphAPI(user_id)
-	request = "me/friends"
+def pullFriendsList(user_id):
+	graph = GraphAPI(MY_ACCESS_TOKEN)
+	request = "{}/friends".format(user_id)
 	rawData = graph.get(request)
 	return json.dumps(rawData)
 
@@ -93,8 +95,8 @@ def get_user(user_id):
                 res["events"] = events
 
                 # Get friends
-                graph = GraphAPI(res["accessid"])
-                request = "me/friends"
+                graph = GraphAPI(MY_ACCESS_TOKEN)
+                request = "{}/friends".format(user_id)
                 rawData = graph.get(request)
                 friends =  json.dumps(rawData)["data"]
                 friend_ids = [friend["id"] for friend in friends]
