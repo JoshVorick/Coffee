@@ -1,0 +1,13 @@
+<ion-modal-view>
+	<ion-header-bar class="bar bar-header bar-light">
+    <h1 class="title">where?</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeModal()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <button ng-repeat="merchant in merchants" class="button button-full button-large button-{{ merchant.color }}" ng-click="createEvent(merchant.name)" style="margin:0; border:none; min-height:80px; text-transform: uppercase;">
+      <strong>{{ merchant.name }}</strong>
+    </button>
+  </ion-content>
+</ion-modal-view>

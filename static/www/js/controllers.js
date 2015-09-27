@@ -5,6 +5,8 @@ angular.module('starter.controllers', [])
   $scope.user = UserService.getUser();
   $scope.events = EventService.getEvents();
   $scope.friends = UserService.getFriends();
+  $scope.merchants = EventService.getMerchants();
+
 
   $scope.newEvent = {
     event_type: "",
@@ -12,13 +14,7 @@ angular.module('starter.controllers', [])
     event_time: "",
     event_location: "",
     event_friend: ""
-  };
-
-  $scope.createEvent = function() {
-    
-    $state.go('/settings');
-    //EventService.createEvent($scope.newEvent);
-  };
+  }; 
 
   $scope.removeFriend = function(friendId) {
     UserService.deleteFriend(friendId);
@@ -39,22 +35,63 @@ angular.module('starter.controllers', [])
     $scope.modalTime = modal;
   });
 
+  $ionicModal.fromTemplateUrl('templates/merchants.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modalLocation = modal;
+  });
+
   // Triggered in the modal to close it
   $scope.closeModal = function() {
     $scope.modal.hide();
     $scope.modalTime.hide();
+    $scope.modalLocation.hide();
   };
 
+  var colors = ['assertive', 'energized', 'royal', 'positive', 'calm', 'balanced', 'dark'];
+  $scope.color = colors[Math.floor((Math.random() * 6))];
+
   // Open the date modal
-  $scope.createDate = function() {
+  $scope.createDate = function(type, friendId) {
+    var pos = $scope.friends.map(function(e) { return e._id; }).indexOf(friendId);
+    var friendName = $scope.friends[pos].name;
+    $scope.newEvent.event_type = type;
+    console.log(friendName);
+    $scope.newEvent.event_friend = friendName;
     $scope.modal.show();
   };
 
   // Open the login modal
-  $scope.createTime = function() {
+  $scope.createTime = function(date) {
+    $scope.newEvent.event_date = date;
     $scope.modalTime.show();
     $scope.modal.hide();
   };
+
+  $scope.createLocation = function(time) {
+    $scope.newEvent.event_time = time;
+    $scope.modalLocation.show();
+    $scope.modalTime.hide();
+  };
+
+  $scope.createEvent = function(location) {
+    $scope.newEvent.event_location = location;
+    $scope.modalLocation.hide();
+    EventService.createEvent($scope.newEvent);
+  };
+
+
+  $scope.color = 'assertive',
+
+  $scope.chooseColor = function() {
+    var count = 1;
+    while ($scope.colors.length < 7) {
+      $scope.color = 'assertive',
+      count++;
+    }
+
+  };
+  
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
