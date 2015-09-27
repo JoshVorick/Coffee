@@ -101,6 +101,9 @@ def get_user(user_id):
 		sql = "SELECT * FROM users WHERE profileid = %s"
 		cursor.execute(sql, (user_id,))
                 res = cursor.fetchone()
+		sql = "SELECT * FROM events WHERE user1 = %s OR user2 = %s"
+		cursor.execute(sql, (user_id,))
+                res = cursor.fetchone()
                 if(res is None):
                     return jsonify({'error':'No such user'})
 		return jsonify(res)
