@@ -163,11 +163,11 @@ def get_events():
 def get_event(event_id):
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "SELECT * FROM users WHERE id = %s"
+		sql = "SELECT * FROM events WHERE id = %s"
 		cursor.execute(sql, (event_id,))
                 res = cursor.fetchone()
                 if(res is None):
-                    return jsonify({'error':'No such user'})
+                    return jsonify({'error':'No such event'})
 		return jsonify(res)
 
 # Create a new event
