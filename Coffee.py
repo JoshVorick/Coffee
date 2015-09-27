@@ -94,11 +94,11 @@ def get_users():
 		return jsonify({ 'users' : cursor.fetchall() })
 
 # Get a specific user
-@app.route('/api/v1/users/<int:user_id>', methods=['GET'])
+@app.route('/api/v1/users/<string:user_id>', methods=['GET'])
 def get_user(user_id):
 	with connection.cursor() as cursor:
 		# Read a single record
-		sql = "SELECT * FROM users WHERE profileid = '%s'"
+		sql = "SELECT * FROM users WHERE profileid = %s"
 		cursor.execute(sql, (user_id,))
                 res = cursor.fetchone()
                 if(res is None):
@@ -120,7 +120,7 @@ def post_user():
 		return jsonify({'success':'true'})
 
 # Update a specific user
-@app.route('/api/v1/users/<int:user_id>', methods=['PUT'])
+@app.route('/api/v1/users/<string:user_id>', methods=['PUT'])
 def put_user(user_id):
 	# Require at least one non-id attribute
 	if not request.json or (not 'name' in request.json and not 'profileid' in request.json):
