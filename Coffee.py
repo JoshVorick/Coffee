@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, make_response, request
-import pymysql.cursors
+import os
+import psycopg2
+import urlparse
 
 # Facebook and json imports
 from facepy import GraphAPI
@@ -20,13 +22,15 @@ MY_ACCESS_TOKEN = "CAACEdEose0cBALpQbgPtZBYzqHIW3m1bEDai91oTwWJX10KvZBAwkNc6fphP
 authomatic = Authomatic(CONFIG, 'your secret string', report_errors=False)
 
 # Connect to the database
-connection = pymysql.connect(host='localhost',
-						   port=5432,
-						   user='owvnvhqozcnkak',
-						   password='trPCRDSfIE2tPwdmZtm2LuuRr',
-						   db='coffee',
-						   charset='utf8mb4',
-						   cursorclass=pymysql.cursors.DictCursor)
+urlparse.uses_netloc.append('postgres')
+url = urlparse.urlparse(os.environ['DATABASE_URL'])
+connection = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+)
 
 # Return JSON on 404 instead of HTML
 @app.errorhandler(404)
