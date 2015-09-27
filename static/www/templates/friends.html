@@ -4,41 +4,11 @@
 <ion-view title="friends">
   <ion-content>
     <ion-list show-delete="false" can-swipe="true">
-      <ion-item class="item item-avatar">
-        <img src="http://placehold.it/100x100">
-        <h2>Elon Musk</h2>
-        <p>Bossman</p>
+      <ion-item ng-repeat="friend in friends" class="item item-avatar">
+        <img src="{{ friend.image }}">
+        <h2>{{ friend.first_name + " " + friend.last_name }}</h2>
+        <p>{{ friend.bio }}</p>
         <ion-option-button class="button-calm icon ion-pizza" style="width:60px;" ng-click="createDate()"></ion-option-button>
-        <ion-option-button class="button-royal icon ion-beer" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-balanced icon ion-coffee" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-energized icon ion-close-circled" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-assertive icon ion-trash-a" ng-click="createDate()" style="width:60px;"></ion-option-button>
-      </ion-item>
-      <ion-item class="item item-avatar">
-        <img src="http://placehold.it/100x100">
-        <h2>John Doe</h2>
-        <p>I'm pretty boring</p>
-        <ion-option-button class="button-calm icon ion-pizza" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-royal icon ion-beer" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-balanced icon ion-coffee" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-energized icon ion-close-circled" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-assertive icon ion-trash-a" ng-click="createDate()" style="width:60px;"></ion-option-button>
-      </ion-item>
-      <ion-item class="item item-avatar">
-        <img src="http://placehold.it/100x100">
-        <h2>Goku</h2>
-        <p>Training in otherworld.</p>
-        <ion-option-button class="button-calm icon ion-pizza" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-royal icon ion-beer" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-balanced icon ion-coffee" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-energized icon ion-close-circled" ng-click="createDate()" style="width:60px;"></ion-option-button>
-        <ion-option-button class="button-assertive icon ion-trash-a" ng-click="createDate()" style="width:60px;"></ion-option-button>
-      </ion-item>
-      <ion-item class="item item-avatar">
-        <img src="http://placehold.it/100x100">
-        <h2>Yo</h2>
-        <p>Training in otherworld.</p>
-        <ion-option-button class="button-calm icon ion-pizza" ng-click="createDate()" style="width:60px;"></ion-option-button>
         <ion-option-button class="button-royal icon ion-beer" ng-click="createDate()" style="width:60px;"></ion-option-button>
         <ion-option-button class="button-balanced icon ion-coffee" ng-click="createDate()" style="width:60px;"></ion-option-button>
         <ion-option-button class="button-energized icon ion-close-circled" ng-click="createDate()" style="width:60px;"></ion-option-button>

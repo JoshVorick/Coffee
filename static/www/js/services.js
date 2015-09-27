@@ -12,7 +12,48 @@ angular.module('starter.services', [])
 		bio: 'This is my bio',
 		image: 'http://placehold.it/100x100'
 	};
-	var friends = [];
+	var friends = [
+		{
+			_id: '1',
+			first_name: 'Elon',
+			last_name: 'Musk',
+			bio: 'Bossman',
+			image: 'http://placehold.it/100x100',
+			status: ''
+		},
+		{
+			_id: '2',
+			first_name: 'John',
+			last_name: 'Doe',
+			bio: 'Im pretty boring',
+			image: 'http://placehold.it/100x100',
+			status: ''
+		},
+		{
+			_id: '3',
+			first_name: 'Goku',
+			last_name: '',
+			bio: 'Training in otherworld.',
+			image: 'http://placehold.it/100x100',
+			status: ''
+		},
+		{
+			_id: '4',
+			first_name: 'Rick',
+			last_name: 'James',
+			bio: 'Im Rick James Bitch',
+			image: 'http://placehold.it/100x100',
+			status: 'fuck-off'
+		},
+		{
+			_id: '5',
+			first_name: 'Charlie',
+			last_name: 'Murphy',
+			bio: 'Cocaine is one hell of a drug.',
+			image: 'http://placehold.it/100x100',
+			status: 'not-now'
+		}
+	];
 
 	var UserService = {
 		getUser: function() {
@@ -31,7 +72,7 @@ angular.module('starter.services', [])
 
 		},
 		getFriends: function() {
-			
+			return friends;
 		},
 		updateFriend: function() {
 			
@@ -41,7 +82,26 @@ angular.module('starter.services', [])
 })
 .factory('EventService', function() {
 
-	var events = [];
+	var events = [
+		{
+			_id: '1',
+			event_type: 'pizza',
+			event_date: 'Today',
+			event_time: 'Evening',
+			event_location: 'Taco Mac',
+			event_friend: 'Elon Musk',
+			event_status: ''
+		},
+		{
+			_id: '2',
+			event_type: 'coffee',
+			event_date: 'Today',
+			event_time: 'Afternoon',
+			event_location: 'Starbucks',
+			event_friend: 'Rick James',
+			event_status: ''
+		}
+	];
 	var newEvent = function(e) {
 		this.event_type = e.event_type;
 		this.event_date = e.event_date;

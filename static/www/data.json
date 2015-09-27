@@ -1,0 +1,69 @@
+[
+	{
+		"_id": "1",
+		"first_name": "Sheehan",
+		"last_name": "Toufiq",
+		"bio": "This is my bio.",
+		"image": "http://placehold.it/100x100",
+		"friends": [
+			{
+				"_id": "1",
+				"first_name": "Elon",
+				"last_name": "Musk",
+				"bio": "Bossman",
+				"image": "http://placehold.it/100x100",
+				"status": ""
+			},
+			{
+				"_id": "2",
+				"first_name": "John",
+				"last_name": "Doe",
+				"bio": "I'm pretty boring.",
+				"image": "http://placehold.it/100x100",
+				"status": ""
+			},
+			{
+				"_id": "3",
+				"first_name": "Goku",
+				"last_name": "",
+				"bio": "Training in otherworld.",
+				"image": "http://placehold.it/100x100",
+				"status": ""
+			},
+			{
+				"_id": "4",
+				"first_name": "Rick",
+				"last_name": "James",
+				"bio": "I'm Rick James Bitch!",
+				"image": "http://placehold.it/100x100",
+				"status": "fuck-off"
+			},
+			{
+				"_id": "5",
+				"first_name": "Charlie",
+				"last_name": "Murphy",
+				"bio": "Cocaine is a hell of a drug.",
+				"image": "http://placehold.it/100x100",
+				"status": "not-now"
+			}
+		],
+		"events": [
+			{
+				"_id": "1",
+				"event_type": "pizza",
+				"event_date": "today",
+				"event_time": "evening",
+				"event_location": "",
+				"event_friend": ""
+			},
+			{
+				"_id": "2",
+				"event_type": "coffee",
+				"event_date": "today",
+				"event_time": "afternoon",
+				"event_location": "",
+				"event_friend": ""
+			}
+		]
+	}
+]

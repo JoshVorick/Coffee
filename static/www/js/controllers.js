@@ -4,12 +4,14 @@ angular.module('starter.controllers', [])
 
   $scope.user = UserService.getUser();
   $scope.events = EventService.getEvents();
+  $scope.friends = UserService.getFriends();
 
   $scope.newEvent = {
     event_type: "",
     event_date: "",
     event_time: "",
-    event_location: ""
+    event_location: "",
+    event_friend: ""
   };
 
   $scope.createEvent = function() {
