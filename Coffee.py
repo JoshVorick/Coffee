@@ -16,7 +16,7 @@ from config import CONFIG
 from flask import Flask, render_template, request, make_response
 app = Flask(__name__)
 
-MY_ACCESS_TOKEN = "CAACEdEose0cBALpQbgPtZBYzqHIW3m1bEDai91oTwWJX10KvZBAwkNc6fphPlZAxB529ufwoh5i9ZCztxMOR9bKLx7uDEoVqqefYsfMhwsbDtNZAvx97nGF7Qo43oIY0Wk76AI0cVCnNrFcZBeVw49SbXZA5R5dflZBxI0qrSTNlniwJi2jS3QZCEOeV1JMDGZAZBz67ZC0EmXnmGkIVtetGucEh"
+MY_ACCESS_TOKEN = "883030211746778|d3c627235a423cc7ebc7ccb564cea7a2"
 
 # Instantiate Authomatic.
 authomatic = Authomatic(CONFIG, 'your secret string', report_errors=False)
@@ -103,10 +103,21 @@ def get_user(user_id):
                 res = cursor.fetchone()
                 if(res is None):
                     return jsonify({'error':'No such user'})
+
+                # Get events
 		sql = "SELECT * FROM events WHERE user1 = %s OR user2 = %s"
 		cursor.execute(sql, (user_id,))
                 events = cursor.fetchone()
                 res["events"] = events
+
+                # Get friends
+                graph = GraphAPI(res["accessid"])
+                request = "me/friends"
+                rawData = graph.get(request)
+                friends =  json.dumps(rawData)["data"]
+                friend_ids = [friend["id"] for friend in friends]
+
+                res["friends"] = friend_ids
 		return jsonify(res)
 
 # Create a new user
